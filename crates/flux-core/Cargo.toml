@@ -1,0 +1,6 @@
+[package]
+name = "flux-core"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]

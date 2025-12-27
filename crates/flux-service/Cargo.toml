@@ -1,0 +1,10 @@
+[package]
+name = "flux-service"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+flux-core = { path = "../flux-core" }
+flux-db = { path = "../flux-db" }
+flux-io = { path = "../flux-io" }
+flux-schema = { path = "../flux-schema" }

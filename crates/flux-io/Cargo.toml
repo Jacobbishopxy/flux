@@ -1,0 +1,8 @@
+[package]
+name = "flux-io"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+flux-core = { path = "../flux-core" }
+flux-schema = { path = "../flux-schema" }

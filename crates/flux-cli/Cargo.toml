@@ -1,0 +1,8 @@
+[package]
+name = "flux-cli"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+flux-core = { path = "../flux-core" }
+flux-db = { path = "../flux-db" }

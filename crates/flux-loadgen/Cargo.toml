@@ -1,0 +1,8 @@
+[package]
+name = "flux-loadgen"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+flux-core = { path = "../flux-core" }
+flux-io = { path = "../flux-io" }

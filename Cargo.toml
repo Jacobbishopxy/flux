@@ -1,0 +1,15 @@
+[workspace]
+members = [
+    "crates/flux-core",
+    "crates/flux-schema",
+    "crates/flux-io",
+    "crates/flux-db",
+    "crates/flux-service",
+    "crates/flux-cli",
+    "crates/flux-loadgen",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
