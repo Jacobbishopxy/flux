@@ -1,0 +1,22 @@
+# author:	Jacob Xie
+# date:	2025/12/28 11:00:55 Sunday
+# brief:
+
+services:
+  timescaledb:
+    image: timescale/timescaledb:2.14.2-pg16
+    container_name: flux-timescaledb
+    environment:
+      POSTGRES_USER: flux
+      POSTGRES_PASSWORD: fluxpassword
+      POSTGRES_DB: flux
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped

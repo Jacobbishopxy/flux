@@ -22,6 +22,7 @@
 - Constraints/indexes: unique (symbol, ts, source, seq_id) to dedup; indexes on (symbol, ts DESC); partial indexes on recent windows if needed.
 - Policies: compress ticks/trades after N hours; drop raw after retention (e.g., 90d) while keeping rolled-up bars; continuous aggregates for 1s/1m bars.
 - Access patterns: parameterized queries for time ranges; server-side cursor/`fetch` to stream chunked results via `sqlx`.
+- User-defined FlatBuffers → DB: provide `schemas/custom/*.fbs` plus a manifest (`schemas/custom/schema.yaml`) that maps message fields to DB column types, time/index keys, and compression/retention hints; `flux-cli schema generate` runs `flatc` for Rust bindings and emits templated SQL migrations (hypertable + indexes + policies) recorded in a `schema_registry` table for versioning.
 
 ## Messaging (ZeroMQ + FlatBuffers)
 
