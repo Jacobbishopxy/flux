@@ -1,0 +1,129 @@
+// FlatBuffers wire schema for Flux market data service.
+// Keep this file ASCII/UTF-8 and version changes via `schema_version` in Envelope.
+
+namespace flux.schema;
+
+enum MessageType : byte {
+  NONE = 0,
+  HEALTH_REQUEST = 1,
+  HEALTH_RESPONSE = 2,
+  GET_CURSOR_REQUEST = 3,
+  GET_CURSOR_RESPONSE = 4,
+  SUBSCRIBE_CANDLES_REQUEST = 5,
+  SUBSCRIBE_CANDLES_ACK = 6,
+  CANDLE_BATCH = 7,
+  BACKFILL_CANDLES_REQUEST = 8,
+  BACKFILL_CANDLES_RESPONSE = 9,
+  ERROR_RESPONSE = 100
+}
+
+table HealthRequest {}
+
+table HealthResponse {
+  ok: bool = true;
+  message: string;
+}
+
+table StreamKey {
+  source_id: string;
+  symbol: string;
+  interval: string;
+}
+
+table GetCursorRequest {
+  key: StreamKey;
+}
+
+table Cursor {
+  // Monotonic server-assigned sequence for the stream.
+  latest_sequence: ulong;
+  // Latest observed candle timestamp (epoch millis).
+  latest_ts_ms: long;
+}
+
+table GetCursorResponse {
+  key: StreamKey;
+  cursor: Cursor;
+}
+
+table SubscribeCandlesRequest {
+  key: StreamKey;
+  // Resume cursor (exclusive). If `has_from_sequence` is false, server starts at latest.
+  has_from_sequence: bool = false;
+  from_sequence_exclusive: ulong = 0;
+}
+
+table SubscribeCandlesAck {
+  accepted: bool = false;
+  reason: string;
+  key: StreamKey;
+  // Cursor at the moment subscription is accepted.
+  latest_sequence: ulong = 0;
+}
+
+table Candle {
+  // Candle timestamp (epoch millis).
+  ts_ms: long;
+  open: double;
+  high: double;
+  low: double;
+  close: double;
+  volume: double;
+}
+
+table CandleBatch {
+  key: StreamKey;
+  // Sequence assigned to `candles[0]`. Subsequent candles are start_sequence + index.
+  start_sequence: ulong;
+  candles: [Candle];
+}
+
+table BackfillCandlesRequest {
+  key: StreamKey;
+  // Fetch candles strictly after this sequence.
+  has_from_sequence: bool = false;
+  from_sequence_exclusive: ulong = 0;
+  // Optional end bound by timestamp.
+  has_end_ts_ms: bool = false;
+  end_ts_ms: long = 0;
+  // Max candles to return in one response.
+  limit: uint = 0;
+}
+
+table BackfillCandlesResponse {
+  key: StreamKey;
+  start_sequence: ulong;
+  candles: [Candle];
+  has_more: bool = false;
+  next_sequence: ulong = 0;
+}
+
+table ErrorResponse {
+  code: uint;
+  message: string;
+}
+
+union Message {
+  HealthRequest,
+  HealthResponse,
+  GetCursorRequest,
+  GetCursorResponse,
+  SubscribeCandlesRequest,
+  SubscribeCandlesAck,
+  CandleBatch,
+  BackfillCandlesRequest,
+  BackfillCandlesResponse,
+  ErrorResponse
+}
+
+table Envelope {
+  // Wire schema version for compatibility checks.
+  schema_version: uint = 1;
+  // Redundant with union type, kept for debugging/forward compat.
+  type_hint: MessageType = NONE;
+  // Optional request/response correlation id.
+  correlation_id: string;
+  message: Message;
+}
+
+root_type Envelope;
