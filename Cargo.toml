@@ -16,3 +16,13 @@ version = "0.1.0"
 
 [workspace.dependencies]
 flatbuffers = "25"
+tokio = { version = "1", features = [
+    "macros",
+    "rt-multi-thread",
+    "time",
+    "sync",
+] }
+zeromq = { version = "0.4.1", default-features = false, features = [
+    "tokio-runtime",
+    "tcp-transport",
+] }

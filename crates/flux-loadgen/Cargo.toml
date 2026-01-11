@@ -6,3 +6,6 @@ version.workspace = true
 [dependencies]
 flux-core = { path = "../flux-core" }
 flux-io = { path = "../flux-io" }
+flux-schema = { path = "../flux-schema" }
+tokio = { workspace = true }
+zeromq = { workspace = true }

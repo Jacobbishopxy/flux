@@ -8,3 +8,6 @@ flux-core = { path = "../flux-core" }
 flux-db = { path = "../flux-db" }
 flux-io = { path = "../flux-io" }
 flux-schema = { path = "../flux-schema" }
+flatbuffers = { workspace = true }
+tokio = { workspace = true }
+zeromq = { workspace = true }
